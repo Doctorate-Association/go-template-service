@@ -4,11 +4,12 @@ package main
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
 	"go-template-service/middleware"
+	"os"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/common/utils"
@@ -47,23 +48,31 @@ func registerMiddleware(h *server.Hertz) {
 	logger := hertzlogrus.NewLogger()
 	hlog.SetLogger(logger)
 	hlog.SetLevel(conf.LogLevel())
-	asyncWriter := &zapcore.BufferedWriteSyncer{
-		WS: zapcore.AddSync(&lumberjack.Logger{
-			Filename:   conf.GetConf().Hertz.LogFileName,
-			MaxSize:    conf.GetConf().Hertz.LogMaxSize,
-			MaxBackups: conf.GetConf().Hertz.LogMaxBackups,
-			MaxAge:     conf.GetConf().Hertz.LogMaxAge,
-		}),
-		FlushInterval: time.Minute,
-	}
-	hlog.SetOutput(asyncWriter)
-	h.OnShutdown = append(h.OnShutdown, func(ctx context.Context) {
-		err := asyncWriter.Sync()
-		if err != nil {
-			hlog.Errorf("Failed to sync log file: %v", err)
-			return
+	if conf.GetEnv() != "dev" {
+		// write the log to file
+		asyncWriter := &zapcore.BufferedWriteSyncer{
+			WS: zapcore.AddSync(&lumberjack.Logger{
+				Filename:   conf.GetConf().Hertz.LogFileName,
+				MaxSize:    conf.GetConf().Hertz.LogMaxSize,
+				MaxBackups: conf.GetConf().Hertz.LogMaxBackups,
+				MaxAge:     conf.GetConf().Hertz.LogMaxAge,
+			}),
+			FlushInterval: time.Minute,
 		}
-	})
+
+		hlog.SetOutput(asyncWriter)
+
+		h.OnShutdown = append(h.OnShutdown, func(ctx context.Context) {
+			err := asyncWriter.Sync()
+			if err != nil {
+				hlog.Errorf("Failed to sync log file: %v", err)
+				return
+			}
+		})
+	} else {
+		// Dev mode only output information to console
+		hlog.SetOutput(os.Stdout)
+	}
 
 	// pprof
 	if conf.GetConf().Hertz.EnablePprof {

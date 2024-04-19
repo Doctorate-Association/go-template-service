@@ -5,9 +5,12 @@ import (
 	"github.com/MicahParks/keyfunc/v3"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	u "github.com/cloudwego/hertz/pkg/common/utils"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/golang-jwt/jwt/v5"
-	"go-template-service/biz/utils"
+	utils "go-template-service/biz/utils"
 	"go-template-service/conf"
+	"net/http"
 	"strings"
 )
 
@@ -20,7 +23,8 @@ func JWKSMiddleware() app.HandlerFunc {
 		jwks, err := keyfunc.NewDefaultCtx(ctx, []string{jwksURL})
 		if err != nil {
 			hlog.Errorf("Failed to create JWKs from URL. Error: %v", err)
-			utils.SendErrResponse(ctx, c, 500, err)
+			utils.SendErrResponse(ctx, c, consts.StatusInternalServerError, err)
+			c.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
 
@@ -28,7 +32,10 @@ func JWKSMiddleware() app.HandlerFunc {
 		bearerToken := c.Request.Header.Get("Authorization")
 		if bearerToken == "" {
 			hlog.Errorf("No access token found.")
-			c.JSON(401, "No access token found.")
+			c.JSON(consts.StatusUnauthorized, u.H{
+				"message": "No access token found.",
+			})
+			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
 
@@ -38,14 +45,18 @@ func JWKSMiddleware() app.HandlerFunc {
 		token, err := jwt.Parse(accessToken, jwks.Keyfunc)
 		if err != nil {
 			hlog.Errorf("Failed to parse JWT. Error: %v", err)
-			utils.SendErrResponse(ctx, c, 401, err)
+			utils.SendErrResponse(ctx, c, consts.StatusUnauthorized, err)
+			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
 
 		// Check if the token is valid
 		if !token.Valid {
 			hlog.Errorf("Invalid JWT.")
-			c.JSON(401, "Invalid JWT.")
+			c.JSON(consts.StatusUnauthorized, u.H{
+				"message": "Invalid JWT.",
+			})
+			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
 

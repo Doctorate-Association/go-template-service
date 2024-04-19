@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -21,7 +22,7 @@ func (h *Method1Service) Run(req *hello.HelloReq) (resp *hello.HelloResp, err er
 	// get userDetail from token
 	userDetail, exist := h.RequestContext.Get("currentUser")
 	if !exist {
-		h.RequestContext.JSON(401, "No user detail found.")
+		h.RequestContext.JSON(consts.StatusBadRequest, "No user detail found.")
 		return
 	}
 
