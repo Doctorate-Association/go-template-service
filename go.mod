@@ -7,6 +7,7 @@ replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 require (
 	github.com/MicahParks/keyfunc/v3 v3.3.2
 	github.com/cloudwego/hertz v0.8.1
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/hertz-contrib/cors v0.1.0
 	github.com/hertz-contrib/gzip v0.0.3
 	github.com/hertz-contrib/logger/accesslog v0.0.0-20240128134225-6b18af47a115
@@ -36,7 +37,6 @@ require (
 	github.com/felixge/fgprof v0.9.3 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
-	github.com/golang-jwt/jwt/v5 v5.2.0 // indirect
 	github.com/golang/protobuf v1.5.0 // indirect
 	github.com/google/pprof v0.0.0-20211214055906-6f57359322fd // indirect
 	github.com/henrylee2cn/ameda v1.4.10 // indirect

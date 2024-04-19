@@ -2,7 +2,6 @@ package utils
 
 import (
 	"context"
-
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -13,6 +12,7 @@ func SendErrResponse(ctx context.Context, c *app.RequestContext, code int, err e
 		Code:    code,
 		Message: err.Error(),
 	}
+	c.Response.SetStatusCode(code)
 	c.JSON(code, errorResponse)
 }
 

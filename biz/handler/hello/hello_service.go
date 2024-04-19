@@ -17,7 +17,7 @@ func Method1(ctx context.Context, c *app.RequestContext) {
 	var req hello.HelloReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		utils.SendErrResponse(ctx, c, consts.StatusBadRequest, err)
 		return
 	}
 
