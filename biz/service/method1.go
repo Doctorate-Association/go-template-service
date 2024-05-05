@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	"github.com/golang-jwt/jwt/v5"
+	"go-template-service/biz/models"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	hello "go-template-service/hertz_gen/cwgo/http/hello"
@@ -27,10 +27,9 @@ func (h *Method1Service) Run(req *hello.HelloReq) (resp *hello.HelloResp, err er
 	}
 
 	// return userDetail name to client
-	claim := userDetail.(jwt.MapClaims)
-	sub, _ := claim["name"].(string)
+	user := userDetail.(models.User)
 	res := &hello.HelloResp{
-		RespBody: "Hello " + sub,
+		RespBody: "Hello " + user.DisplayName,
 	}
 	return res, nil
 }
