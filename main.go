@@ -5,19 +5,20 @@ package main
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/hertz-contrib/logger/logrus"
+	"go-template-service/biz/dal/redis"
 	"go-template-service/middleware"
 	"os"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/cors"
 	"github.com/hertz-contrib/gzip"
 	"github.com/hertz-contrib/logger/accesslog"
-	hertzlogrus "github.com/hertz-contrib/logger/logrus"
 	"github.com/hertz-contrib/pprof"
 	"go-template-service/biz/router"
 	"go-template-service/conf"
@@ -31,7 +32,10 @@ func main() {
 	address := conf.GetConf().Hertz.Address
 	h := server.New(server.WithHostPorts(address))
 
+	initLogger()
+
 	registerMiddleware(h)
+	redis.Init()
 
 	// add a ping route to test
 	h.GET("/ping", func(c context.Context, ctx *app.RequestContext) {
@@ -43,11 +47,14 @@ func main() {
 	h.Spin()
 }
 
-func registerMiddleware(h *server.Hertz) {
-	// log
-	logger := hertzlogrus.NewLogger()
+func initLogger() {
+	logger := logrus.NewLogger()
 	hlog.SetLogger(logger)
 	hlog.SetLevel(conf.LogLevel())
+}
+
+func registerMiddleware(h *server.Hertz) {
+
 	if conf.GetEnv() != "dev" {
 		// write the log to file
 		asyncWriter := &zapcore.BufferedWriteSyncer{

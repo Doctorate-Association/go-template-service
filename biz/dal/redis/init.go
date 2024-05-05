@@ -2,7 +2,7 @@ package redis
 
 import (
 	"context"
-
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/redis/go-redis/v9"
 	"go-template-service/conf"
 )
@@ -10,6 +10,7 @@ import (
 var RedisClient *redis.Client
 
 func Init() {
+
 	RedisClient = redis.NewClient(&redis.Options{
 		Addr:     conf.GetConf().Redis.Address,
 		Username: conf.GetConf().Redis.Username,
@@ -19,4 +20,7 @@ func Init() {
 	if err := RedisClient.Ping(context.Background()).Err(); err != nil {
 		panic(err)
 	}
+
+	hlog.Infof("Redis connected successfully at %s", conf.GetConf().Redis.Address)
+
 }

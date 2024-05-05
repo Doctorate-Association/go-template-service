@@ -19,4 +19,8 @@ redis:
   db: 0
 
 idp:
-  jwks_url: "http://sso.dev.com:8000/.well-known/jwks"
+  jwks_url: "http://sso.dev.com:8000/.well-known/jwks",
+
+consul:
+    address: "consul:8500"
+
