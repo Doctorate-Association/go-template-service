@@ -5,6 +5,7 @@ go 1.22.1
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
+	github.com/MicahParks/jwkset v0.5.17
 	github.com/MicahParks/keyfunc/v3 v3.3.2
 	github.com/cloudwego/hertz v0.8.1
 	github.com/golang-jwt/jwt/v5 v5.2.1
@@ -16,7 +17,7 @@ require (
 	github.com/kr/pretty v0.3.1
 	github.com/redis/go-redis/v9 v9.5.1
 	go.uber.org/zap v1.27.0
-	google.golang.org/protobuf v1.33.0
+	google.golang.org/protobuf v1.34.1
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gopkg.in/validator.v2 v2.0.1
 	gopkg.in/yaml.v2 v2.4.0
@@ -25,7 +26,6 @@ require (
 )
 
 require (
-	github.com/MicahParks/jwkset v0.5.17 // indirect
 	github.com/bytedance/go-tagexpr/v2 v2.9.2 // indirect
 	github.com/bytedance/gopkg v0.0.0-20220413063733-65bf48ffb3a7 // indirect
 	github.com/bytedance/sonic v1.11.4 // indirect
