@@ -1,0 +1,23 @@
+// hello.proto
+syntax = "proto3";
+
+package user;
+
+import "api.proto";
+import "common.proto";
+
+option go_package = "basic/user";
+
+message UserReq {
+}
+
+message UserResp {
+  bool success = 1;
+  User user = 2;
+}
+
+service UserService {
+  rpc GetUserDetail(UserReq) returns(UserResp) {
+    option (api.get) = "/api/currentUser";
+  }
+}

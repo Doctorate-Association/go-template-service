@@ -1,4 +1,4 @@
-package hello
+package user
 
 import (
 	"context"
@@ -7,21 +7,21 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"go-template-service/biz/service"
 	"go-template-service/biz/utils"
-	hello "go-template-service/hertz_gen/cwgo/http/hello"
+	user "go-template-service/hertz_gen/basic/user"
 )
 
-// Method1 .
-// @router /hello [GET]
-func Method1(ctx context.Context, c *app.RequestContext) {
+// GetUserDetail .
+// @router /users/currentUser [GET]
+func GetUserDetail(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req hello.HelloReq
+	var req user.UserReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusBadRequest, err)
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
 
-	resp, err := service.NewMethod1Service(ctx, c).Run(&req)
+	resp, err := service.NewGetUserDetailService(ctx, c).Run(&req)
 	if err != nil {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return

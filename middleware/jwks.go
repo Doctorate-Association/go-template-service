@@ -11,9 +11,9 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/golang-jwt/jwt/v5"
 	"go-template-service/biz/dal/redis"
-	"go-template-service/biz/models"
 	"go-template-service/biz/utils"
 	"go-template-service/conf"
+	"go-template-service/hertz_gen/common"
 	"log"
 	"net/http"
 	"net/url"
@@ -56,7 +56,7 @@ func JWKSMiddleware() app.HandlerFunc {
 
 		if err == nil {
 
-			var cu models.User
+			var cu common.User
 			err = json.Unmarshal([]byte(val), &cu)
 			if err != nil {
 				hlog.Errorf("Failed to unmarshal user info. Error: %v", err)
@@ -89,8 +89,8 @@ func JWKSMiddleware() app.HandlerFunc {
 			return
 		}
 
-		cu := models.User{
-			ID:          token.Claims.(jwt.MapClaims)["id"].(string),
+		cu := common.User{
+			Id:          token.Claims.(jwt.MapClaims)["id"].(string),
 			Name:        token.Claims.(jwt.MapClaims)["name"].(string),
 			DisplayName: token.Claims.(jwt.MapClaims)["displayName"].(string),
 			Avatar:      token.Claims.(jwt.MapClaims)["avatar"].(string),

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option go_package = "common";
+
+message User {
+    string id = 1;
+    string name = 2;
+    string display_name = 3;
+    string email = 4;
+    string avatar = 5;
+    string phone = 6;
+    double exp = 7; // Exp user expire time
+    double nvb = 8; // Nvb user not valid before
+    double iat = 9; // Iat  user issued at
+    string jti = 10; // Jti user jwt id
+}
