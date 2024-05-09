@@ -1,5 +1,5 @@
 #!/bin/bash
 CURDIR=$(cd $(dirname $0); pwd)
-BinaryName=hellotest
+BinaryName=userservice
 echo "$CURDIR/bin/${BinaryName}"
 exec $CURDIR/bin/${BinaryName}
