@@ -5,8 +5,8 @@ go 1.22.1
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
-	github.com/MicahParks/jwkset v0.5.17
-	github.com/MicahParks/keyfunc/v3 v3.3.2
+	github.com/MicahParks/jwkset v0.5.18
+	github.com/MicahParks/keyfunc/v3 v3.3.3
 	github.com/cloudwego/hertz v0.8.1
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/hertz-contrib/cors v0.1.0
